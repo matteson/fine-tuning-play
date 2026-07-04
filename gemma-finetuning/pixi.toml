@@ -1,0 +1,32 @@
+[workspace]
+name = "gemma-finetuning"
+version = "0.1.0"
+channels = ["conda-forge"]
+platforms = [{ platform = "linux-64", cuda = "13" }]
+
+[tasks]
+
+[dependencies]
+python = "3.10.*"
+ipykernel = ">=7.3.0,<8"
+ipywidgets = ">=8"
+
+[pypi-dependencies]
+# CUDA 13 (cu130) matched torch 2.11 trio (driver 580 -> CUDA 13.0).
+torch = { version = "==2.11.0", index = "https://download.pytorch.org/whl/cu130" }
+torchvision = { version = "==0.26.0", index = "https://download.pytorch.org/whl/cu130" }
+torchaudio = { version = "==2.11.0", index = "https://download.pytorch.org/whl/cu130" }
+
+# transformers <=5.5.0 predated Gemma 4 (no gemma4 model class) -> the LoRA
+# notebook's clean kernel failed on it. 5.13.0 is what Gemma 4 and unsloth
+# 2026.6.9 actually require. trl 0.24.0 only needs transformers>=4.56.1, so the
+# <=0.24.0 ceiling still holds against 5.13.
+transformers = ">=5.13.0,<6"
+datasets = ">=3.4.1,<4.4.0"
+trl = "<=0.24.0"
+peft = "*"
+accelerate = "*"
+bitsandbytes = "*"
+diffusers = "*"
+pydantic = "*"
+unsloth = "*"
